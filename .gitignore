@@ -1,0 +1,11 @@
+*.classpath
+*.DS_Store
+**/.idea/*
+**/target/*
+**.log
+**.iml
+**.sum
+**/.settings/*
+**.project
+*/client/package-lock.json
+.scannerwork

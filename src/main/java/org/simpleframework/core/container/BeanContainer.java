@@ -3,6 +3,7 @@ package org.simpleframework.core.container;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.simpleframework.aop.annotation.Aspect;
 import org.simpleframework.core.annontation.Component;
 import org.simpleframework.core.annontation.Controller;
 import org.simpleframework.core.annontation.Repository;
@@ -18,22 +19,33 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- *
+ * 自己实现的bean 容器
+ * todo 优化 将方法抽象为接口 类似于Spring 的一些顶级接口
  */
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BeanContainer {
 
+    /**
+     * 用于存放所有的Bean 基于Class 为Key  Bean 为Value
+     */
     private static final Map<Class<?>, Object> BEAN_MAP = new ConcurrentHashMap<>();
 
-    private static final Set<Class<? extends Annotation>> BEAN_ANNOTATION = Set.of(Component.class, Controller.class, Repository.class, Service.class);
+    private static final Set<Class<? extends Annotation>> BEAN_ANNOTATION = Set.of(Component.class, Controller.class, Repository.class, Service.class,
+                                                                                   Aspect.class);
 
+    /**
+     * 多线程可见，是否已经开始加载
+     */
     private volatile boolean loaded;
 
+    /**
+     * 单例
+     */
     enum ContainerHolder {
         HOLDER;
 
-        private BeanContainer instance;
+        private final BeanContainer instance;
 
         ContainerHolder() {
             log.info("Bean Container Instance! ");
@@ -41,18 +53,32 @@ public final class BeanContainer {
         }
     }
 
+    /**
+     * 是否已经开始加载
+     */
     public boolean isLoaded() {
         return loaded;
     }
 
+    /**
+     * 获取单例
+     */
     public static BeanContainer getInstance() {
         return ContainerHolder.HOLDER.instance;
     }
 
+    /**
+     * 获取Bean的数量
+     */
     public int getBeanMapSize() {
         return BEAN_MAP.size();
     }
 
+    /**
+     * 同步方法加载指定 packageName 下的所有添加了容器注解的类
+     *
+     * @param packageName 包的全路径名称
+     */
     public synchronized void loadBeans(String packageName) {
         if (isLoaded()) {
             log.warn(" BeanContainer has been loaded !");
@@ -98,6 +124,7 @@ public final class BeanContainer {
 
     /**
      * 获取bean_map keySet
+     * 获取容器里的所有的类
      */
     public Set<Class<?>> getClassSet() {
         return BEAN_MAP.keySet();

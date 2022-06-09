@@ -25,6 +25,12 @@ public final class ClassUtil {
 
     private final static String CLASS_FILE_SUFFIX = ".class";
 
+    /**
+     * 提取包下的所有Class对象
+     *
+     * @param packageName 指定包名
+     * @return
+     */
     public static Set<Class<?>> extractPackageClass(String packageName) {
 
         var classes = new HashSet<Class<?>>();
@@ -108,14 +114,25 @@ public final class ClassUtil {
         }
     }
 
+    /**
+     * 获取当前线程的类加载器
+     */
     private static ClassLoader getClassLoader() {
         return Thread.currentThread().getContextClassLoader();
     }
 
-    public static void setField(Field field, Object obj, Object target, boolean accessible) {
+    /**
+     * 给字段设定值
+     *
+     * @param field      字段
+     * @param obj        包含字段的对象
+     * @param value      需要设定的值
+     * @param accessible 访问权限
+     */
+    public static void setField(Field field, Object obj, Object value, boolean accessible) {
         field.setAccessible(accessible);
         try {
-            field.set(obj, target);
+            field.set(obj, value);
         } catch (IllegalAccessException e) {
             log.error("setField error", e);
             throw new RuntimeException(e);

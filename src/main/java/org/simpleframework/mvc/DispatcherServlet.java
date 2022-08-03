@@ -1,4 +1,4 @@
-package com.example.simpleframework.servlet.controller;
+package org.simpleframework.mvc;
 
 import com.example.simpleframework.servlet.controller.business.HeadlineController;
 import lombok.extern.slf4j.Slf4j;
@@ -19,18 +19,14 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        super.init();
         log.info("初始化 servlet");
+        // 常驻内存变量初始化
+        // 1. 容器初始化，
+        // 2. 初始化请求处理器
     }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.service(req, resp);
-        log.info("请求路径 : {}", req.getServletPath());
-        log.info("请求方式 : {}", req.getMethod());
-        final var HEAD_LINE_PATH = "/head-lines/";
-        if (HEAD_LINE_PATH.equals(req.getServletPath())) {
-            new HeadlineController().addHeadline(req, resp);
-        }
+
     }
 }

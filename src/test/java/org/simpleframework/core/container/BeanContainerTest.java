@@ -1,7 +1,7 @@
 package org.simpleframework.core.container;
 
 import com.example.simpleframework.servlet.common.service.HeadLineService;
-import com.example.simpleframework.servlet.controller.DispatcherServlet;
+import org.simpleframework.mvc.DispatcherServlet;
 import com.example.simpleframework.servlet.controller.business.HeadlineController;
 import org.junit.jupiter.api.*;
 import org.simpleframework.core.annontation.Service;
